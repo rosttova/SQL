@@ -1,4 +1,4 @@
-Homework #2
+
 -- show all customers in Australia
 select * from classicmodels.customers
 where country = 'Australia';
