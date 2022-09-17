@@ -1,0 +1,12 @@
+1. Add column 'country' to dept table in mywork database
+    ALTER TABLE mywork add column country varchar (50);
+  
+2. Rename column 'city' to 'loc'
+alter table mywork.EMPLOYEE_TEST rename column `city` to `loc`; 
+
+3. Add three more departments: HR, Engineering, Marketing
+
+
+4. Write sql statement to show which department is in Atlanta
+select deptno, loc from mywork.dept
+where loc = 'Atlanta';
