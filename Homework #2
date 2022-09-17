@@ -4,7 +4,7 @@ select * from classicmodels.customers
 where country = 'Australia';
 
 -- show First and Last name of customers in Melbourne
-select contactLastName, contactFirstName from classicmodels.customers
+select contactLastName, contactFirstName, city from classicmodels.customers
 where city = 'Melbourne';
 
 -- show all customers with Credit Limit over $200,000
