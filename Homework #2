@@ -9,7 +9,7 @@ where city = 'Melbourne';
 
 -- show all customers with Credit Limit over $200,000
 select * from classicmodels.customers
-where creditLimit >= 200000;
+where creditLimit > 200000;
 
 -- who is the president of the company?
 select lastName, firstName from classicmodels.employees
