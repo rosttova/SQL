@@ -5,7 +5,10 @@
 alter table mywork.EMPLOYEE_TEST rename column `city` to `loc`; 
 
 3. Add three more departments: HR, Engineering, Marketing
-
+insert into mywork.dept (deptho, dname, city) values
+(5, 'HR', 'SAN FRANCISCO'),
+(6, 'ENGINEERING', 'NEW YORK'),
+(7, 'MARKETING', 'SAN DIEGO);
 
 4. Write sql statement to show which department is in Atlanta
 select deptno, loc from mywork.dept
