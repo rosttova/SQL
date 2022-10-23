@@ -1,0 +1,130 @@
+Homework for Lesson #4 
+-- Part #1 classicmodels database 
+
+-- 1.how many vendors, product lines, and products exist in the database?
+select count(productVendor), count(productLine), count(productName) from classicmodels.products;
+
+-- 2.what is the average price, buy price, MSRP per vendor?
+select productVendor, avg(buyPrice), avg(MSRP) from classicmodels.products
+group by productVendor;
+
+-- 3.what is the average price, buy price, MSRP per customer?
+SELECT
+orders.customerNumber, AVG(det.priceEach) as AvgPrice, AVG(prod.buyPrice) as AvgBuyPrice, AVG(prod.MSRP) as AvgMSRP 
+FROM classicmodels.orders orders 
+JOIN classicmodels.orderdetails det on det.orderNumber = orders.orderNumber
+JOIN classicmodels.products prod on prod.productCode = det.productCode
+GROUP BY orders.customerNumber
+ORDER BY orders.customerNumber;
+
+-- 4.what product was sold the most?
+
+-- 5.how much money was made between buyPrice and MSRP?
+
+-- 6.which vendovr sells 1966 Shelby Cobra?
+select productVendor, productName from classicmodels.products
+where productName like '%1966 Shelby Cobra%';
+
+-- 7.which vendor sells more products?
+SELECT prod.productVendor, SUM(det.quantityOrdered) as quantity, count(det.productcode) as quantity2
+FROM classicmodels.products prod
+JOIN classicmodels.orderdetails det on prod.productCode = det.productCode
+GROUP BY prod.productVendor
+ORDER BY quantity desc
+LIMIT 1;
+
+-- 8.which product is the most and least expensive?
+select productName, buyPrice from classicmodels.products
+where buyPrice = (select max(buyPrice) from classicmodels.products);
+
+select productName, buyPrice from classicmodels.products
+where buyPrice = (select min(buyPrice) from classicmodels.products);
+
+-- 9.which product has the most quantityInStock?
+select productName, quantityInStock from classicmodels.products
+where quantityInStock = (select max(quantityInStock) from classicmodels.products);
+
+-- 10.list all products that have quantity in stock less than 20
+select productName, quantityInStock from classicmodels.products
+where quantityInStock < 20;
+
+-- 11.which customer has the highest and lowest credit limit?
+select customerName, creditLimit from classicmodels.customers
+where creditLimit = (select max(creditLimit) from classicmodels.customers);
+
+select customerName, creditLimit from classicmodels.customers
+where creditLimit = (select min(creditLimit) from classicmodels.customers);
+
+-- 12.rank customers by credit limit
+select customerNumber, customerName, creditLimit from classicmodels.customers
+group by creditLimit
+order by creditLimit desc;
+
+-- 13.list the most sold product by city
+
+-- 14.customers in what city are the most profitable to the company?
+select customerName, city, amount from classicmodels.customers as c
+inner join classicmodels.payments as p 
+on c.customerNumber = p.customerNumber
+order by p.amount desc
+limit 1;
+
+-- 15.what is the average number of orders per customer?
+
+-- 16.who is the best customer?
+select customerName, city, amount from classicmodels.customers as c
+inner join classicmodels.payments as p 
+on c.customerNumber = p.customerNumber
+order by p.amount desc
+limit 1;
+
+-- 17.customers without payment
+select customerName from classicmodels.customers as c
+inner join classicmodels.payments as p 
+on c.customerNumber = p.customerNumber
+where p.amount is null;
+
+-- 18.what is the average number of days between the order date and ship date?
+
+-- 19.sales by year
+select year(paymentDate) as years, sum(amount) from classicmodels.payments
+group by years
+order by years desc;
+
+-- 20.how many orders are not shipped?
+select count(orderNumber) as count from classicmodels.orders
+where shippedDate is null;
+
+-- 21.list all employees by their (full name: first + last) in alpabetical order
+select firstName, lastName, jobTitle from classicmodels.employees
+order by firstName asc;
+
+SELECT
+CONCAT(lastName,' ', firstName) as fullName
+FROM classicmodels.employees
+ORDER BY fullName;
+
+-- 22.list of employees  by how much they sold in 2003?
+SELECT CONCAT(e.lastName, ' ',e.firstName) as fullName, YEAR(p.paymentDate) as Year_sold, YEAR(o.orderdate) as Year_ordered, sum(p.amount) as sold
+FROM classicmodels.employees e
+JOIN classicmodels.customers c ON e.employeeNumber = c.salesRepEmployeeNumber
+JOIN classicmodels.payments p ON c.customerNumber = p.customerNumber
+-- for payments
+-- where YEAR(p.paymentDate) = 2003
+-- for orders: 
+JOIN classicmodels.orders o on o.customernumber=c.customernumber
+where o.orderdate between'2003-01-01' and '2003-12-31'
+GROUP BY fullName
+ORDER BY fullName, p.amount;
+
+-- 23.which city has the most number of employees?
+
+-- 24.which office has the biggest sales?
+select city, sum(amount) as sales from classicmodels.employees e
+inner join classicmodels.customers c
+on e.reportsTo = c.salesRepEmployeeNumber
+inner join classicmodels.payments p
+on c.customerNumber = p.customerNumber
+group by city
+order by sales desc
+limit 1;
